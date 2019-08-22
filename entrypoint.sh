@@ -7,6 +7,8 @@ SCRIPTS="pfred \
          ensemblapi \
          bowtie"
 
+BOWTIEL="a b c d e"
+
 WEB=https://github.com/pfred/pfred-docker/releases/download/v1.0-alpha
 
 echo "Setting up environment..."
@@ -28,11 +30,17 @@ for dir in $SCRIPTS
 do
     if [ ! -d $SCRIPTDIR/$dir ]; then
         echo "Downloading $dir from github"
-        wget $WEB/$dir.tar.gz*
-        if [$dir == bowtie]; then
+        if [ $dir == "bowtie" ]; then
+            for letter in $BOWTIEL
+            do
+                wget $WEB/$dir.tar.gz.parta$letter
+            done
             cat bowtie.tar.gz.parta* > bowtie.tar.gz
             rm *.tar.gz.parta*
+        else
+            wget $WEB/$dir.tar.gz
         fi
+
         tar -xvf $dir.tar.gz
         rm *.tar.gz
     fi
