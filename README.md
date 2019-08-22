@@ -1,11 +1,11 @@
 # pfred-docker
-PFRED Docker project
+## PFRED Docker project
 
-* Description
+# Description
 This is a repository for the Dockerfile and file dependencies for the RESTful-PFRED service that is compiled as a `.war` file (see [pfred-rest-service](https://github.com/pfred/pfred-rest-service)).
 
-* Creating the pfredservice docker container
-** Image builder
+# Creating the pfredservice docker container
+## Image builder
 To use this Dockerfile layer, run the following docker command:
 
 `docker build -t pfredimg .`
@@ -13,7 +13,7 @@ To use this Dockerfile layer, run the following docker command:
 Note that this process will setup the pfredservice environment and install all needed
 dependencies. Process might take up to 10 mins in a regular modern laptop.
 
-** Running the service container
+## Running the service container
 
 Once the pfredimg image has been created, docker should now show the status and running uptime:
 
@@ -33,7 +33,7 @@ The `entrypoint` will also create a docker volume named `pfred-docker_pfred-vol`
 
 And the service container should be immediately ready for use since all the data has been stored into `pfred-docker_pfred-vol`.
 
-* Unloading the service container and cleaning up
+## Unloading the service container and cleaning up
 
 Once the service has been used and it is not longer needed, execute:
 
