@@ -1,5 +1,4 @@
 # pfred-docker
-## PFRED Docker project
 
 # Description
 This is a repository for the Dockerfile and file dependencies for the RESTful-PFRED service that is compiled as a `.war` file (see [pfred-rest-service](https://github.com/pfred/pfred-rest-service)).
@@ -54,4 +53,5 @@ all unused images (not just dangling images), add the -a flag to the command:
 Then you should see no images or volumes,
 
 `docker images -a`
+
 `docker volume ls`
