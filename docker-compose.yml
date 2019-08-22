@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  pfred-service:
+    image: pfredimg:latest
+    ports:
+      - "8080:8080"
+    container_name:
+      pfredservice
+    volumes:
+      - pfred-vol:/home/pfred
+
+volumes:
+  pfred-vol:
