@@ -27,7 +27,8 @@ named `pfredservice`. Note that the `-d` flag will detach the shell from the run
 
 Once the service is ready, you should be able to access the REST API at http://localhost:8080/PFREDRestService/api. Keep in mind that the `entrypoint` will download the scripts and data generated from `bowtie`, therefore it might take up to 10 mins while the container downloads everything it needs before the pfredservice is ready.
 
-The `entrypoint` will also create a docker volume named `pfred-docker_pfred-vol` so that if the pfredservice docker container is killed, it can be reloaded via the command:`
+The `entrypoint` will also create a docker volume named `pfred-docker_pfred-vol` so that if the pfredservice docker container is killed, it can be reloaded via the command:
+
 `docker-compose up -d pfred-service`
 
 And the service container should be immediately ready for use since all the data has been stored into `pfred-docker_pfred-vol`.
