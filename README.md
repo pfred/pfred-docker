@@ -22,7 +22,7 @@ Then, the container can be loaded by the following command:
 
 `docker-compose up -d`
 
-If run for the first time, this will create a docker volume named 'dockerfiles-sl_pfred-vol' and a docker container 
+If run for the first time, this will create a docker volume named `dockerfiles-sl_pfred-vol` and a docker container 
 named `pfredservice`. Note that the `-d` flag will detach the shell from the running container, the RESTful service will not be ready to use until the command `docker-compose logs` shows a `Tomcat started` message.
 
 Once the service is ready, you should be able to access the REST API at http://localhost:8080/PFREDRestService/api. Keep in mind that the `entrypoint` will download the scripts and data generated from `bowtie`, therefore it might take up to 10 mins while the container downloads everything it needs before the pfredservice is ready.
