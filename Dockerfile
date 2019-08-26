@@ -108,10 +108,10 @@ RUN source /root/.bashrc && mkdir scripts scratch
 
 # Get libraries from github
 
-COPY ./entrypoint.sh entrypoint.sh
+COPY entrypoint.sh entrypoint.sh
 
-COPY ./setup_env.sh setup_env.sh
+COPY setup_env.sh setup_env.sh
 
 RUN chmod a+x entrypoint.sh && chmod a+x setup_env.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["sh", "entrypoint.sh"]
