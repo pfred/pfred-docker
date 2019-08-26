@@ -6,9 +6,9 @@ MAINTAINER Simone Sciabola <simone.sciabola@biogen.com>
 
 # Create pfred directory
 
-ENV PFREDIR /home/pfred
+WORKDIR /home/pfred
 
-WORKDIR ${PFREDIR}
+ENV PFREDIR /home/pfred
 
 # Locate myself at home
 
@@ -91,7 +91,9 @@ FROM scientificlinux/sl:6 as pfredenv
 
 # Create pfred directory
 
-WORKDIR ${PFREDIR}/
+WORKDIR /home/pfred
+
+ENV PFREDIR /home/pfred
 
 # Install java using yum. TODO: Use yum remove to remove unnecessary dependencies
 
