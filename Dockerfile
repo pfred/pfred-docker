@@ -6,11 +6,13 @@ MAINTAINER Simone Sciabola <simone.sciabola@biogen.com>
 
 # Create pfred directory
 
-WORKDIR /home/pfred/
+ENV PFREDIR /home/pfred
+
+WORKDIR ${PFREDIR}
 
 # Locate myself at home
 
-RUN cd /home && mkdir /home/pfred/bin
+RUN cd /home && mkdir ${PFREDIR}/bin
 
 # Install dependencies then clean up cache
 
@@ -38,47 +40,64 @@ RUN cd /home/ && \
   wget https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-10.tar.gz && \
   wget https://cran.r-project.org/src/contrib/Archive/e1071/e1071_1.5-27.tar.gz && \
   cd /home/numpy-1.4.1 && \
-  python setup.py build --fcompiler=gnu95 && python setup.py install --prefix=/home/pfred/bin/numpy && \
+  python setup.py build --fcompiler=gnu95 && python setup.py install --prefix=${PFREDIR}/bin/numpy && \
   cd /home/R-2.6.0 && \
-  ./configure --prefix=/home/pfred/bin/R2.6.0 --enable-R-shlib --with-x=no && make && \
+  ./configure --prefix=${PFREDIR}/bin/R2.6.0 --enable-R-shlib --with-x=no && make && \
   make check && make install
 
 # Library variables
 
-RUN echo "export PATH=/home/pfred/bin/R2.6.0/bin:$PATH" >> ~/.bashrc && \
-  echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/pfred/bin/R2.6.0/bin" >> ~/.bashrc && \
-  echo "export RHOMES='/home/pfred/bin/R2.6.0/lib64/R'" >> ~/.bashrc && \
-  echo "export PYTHONPATH=/home/pfred/bin/site-packages:/home/pfred/bin/site-packages/rpy:$PYTHONPATH" >> ~/.bashrc
+RUN echo "export PATH=${PFREDIR}/bin/R2.6.0/bin:$PATH" >> ~/.bashrc && \
+  echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PFREDIR}/bin/R2.6.0/bin" >> ~/.bashrc && \
+  echo "export RHOMES='${PFREDIR}/bin/R2.6.0/lib64/R'" >> ~/.bashrc && \
+  echo "export PYTHONPATH=${PFREDIR}/bin/site-packages:${PFREDIR}/bin/site-packages/rpy:$PYTHONPATH" >> ~/.bashrc
 
 # Download and install R packages: rpy, pls, rf, e1071
 
 RUN source ~/.bashrc && \
   cd /home/rpy-1.0.2 && \
-  python setup.py install --prefix=/home/pfred/bin/rpy && \
+  python setup.py install --prefix=${PFREDIR}/bin/rpy && \
   cd /home/ && \
   R CMD INSTALL pls_2.1-0.tar.gz && \
   R CMD INSTALL randomForest_4.6-10.tar.gz && \
   R CMD INSTALL e1071_1.5-27.tar.gz
 
-WORKDIR /home/pfred/bin/site-packages
+WORKDIR ${PFREDIR}/bin/site-packages
 
 RUN mkdir rpy
 
-RUN mv /home/pfred/bin/numpy/lib64/python2.6/site-packages/numpy . && \
-  mv /home/pfred/bin/rpy/lib64/python2.6/site-packages/* rpy && \
-  rm -rf /home/pfred/bin/{numpy,rpy}
+RUN mv ${PFREDIR}/bin/numpy/lib64/python2.6/site-packages/numpy . && \
+  mv ${PFREDIR}/bin/rpy/lib64/python2.6/site-packages/* rpy && \
+  rm -rf ${PFREDIR}/bin/{numpy,rpy}
+
+# python3 dependencies
+
+RUN yum -y install zlib-devel openssl-devel && \
+  yum clean all
+
+# Install python3
+
+RUN cd /tmp && \
+  wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tgz && \
+  tar zxvf Python-3.6.2.tgz && \
+  cd Python-3.6.2 && \
+  ./configure --prefix=${PFREDIR}/bin/python-3.6.2 && \
+  make && make install && \
+  echo "export PATH=${PFREDIR}/bin/python-3.6.2/bin:$PATH" >> /root/.bashrc && \
+  source /root/.bashrc && \
+  pip3 install requests
 
 FROM scientificlinux/sl:6 as pfredenv
 
 # Create pfred directory
 
-WORKDIR /home/pfred/
+WORKDIR ${PFREDIR}/
 
 # Install java using yum. TODO: Use yum remove to remove unnecessary dependencies
 
 RUN yum install -y java perl perl-DBI perl-DBD-mysql wget libgfortran && yum clean all
 
-COPY --from=builder /home/pfred/bin /home/pfred/bin
+COPY --from=builder ${PFREDIR}/bin ${PFREDIR}/bin
 COPY --from=builder /root/.bashrc /root/.bashrc
 
 # Create the scripts and scratch directory
