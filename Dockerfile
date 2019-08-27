@@ -83,9 +83,9 @@ RUN cd /tmp && \
   cd Python-3.6.2 && \
   ./configure --prefix=${PFREDIR}/bin/python-3.6.2 && \
   make && make install && \
-  echo "export PATH=${PFREDIR}/bin/python-3.6.2/bin:$PATH" >> /root/.bashrc && \
+  echo "export PATH=${PFREDIR}/bin/python-3.6.2/bin:\$PATH" >> /root/.bashrc && \
   source /root/.bashrc && \
-  pip3 install requests
+  pip3 install requests ensembl_rest
 
 FROM scientificlinux/sl:6 as pfredenv
 
@@ -114,4 +114,4 @@ COPY setup_env.sh setup_env.sh
 
 RUN chmod a+x entrypoint.sh && chmod a+x setup_env.sh
 
-ENTRYPOINT ["sh", "entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
