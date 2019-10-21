@@ -1,4 +1,3 @@
-
 # User specific aliases and functions
 alias checklog='tail -n 100 -f $CATALINA_HOME/logs/catalina.out'
 
@@ -29,3 +28,4 @@ export BOWTIE_BUILD="${BOWTIE_HOME}/bowtie-build"
 
 #path
 export PATH=${CATALINA_HOME}/bin:$HOME/bin:${PFRED_HOME}/scripts/pfred:$PATH
+export PATH=${BOWTIE_HOME}:$PATH

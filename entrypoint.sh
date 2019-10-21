@@ -9,6 +9,8 @@ SCRIPTS="pfred \
 
 BOWTIEL="a b c d e"
 
+# TODO: Check if website is working
+
 WEB=https://github.com/pfred/pfred-docker/releases/download/v1.0-alpha
 
 echo "Setting up environment..."

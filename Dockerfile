@@ -23,6 +23,7 @@ RUN yum install -y perl \
   gcc-gfortran \
   python-devel \
   readline-devel \
+  mysql-devel \
   perl-DBI \
   perl-DBD-mysql && \
   yum clean all
@@ -72,20 +73,35 @@ RUN mv ${PFREDIR}/bin/numpy/lib64/python2.6/site-packages/numpy . && \
 
 # python3 dependencies
 
-RUN yum -y install zlib-devel openssl-devel && \
+RUN yum -y install tk-devel gdbm-devel zlib-devel libffi libffi-devel && \
   yum clean all
 
-# Install python3
+# Install OpenSSl
+
+RUN cd /usr/src && \
+  curl https://www.openssl.org/source/openssl-1.0.2o.tar.gz | tar xz && \
+  cd openssl-1.0.2o && \
+  ./config shared --prefix=/usr/local/ && \
+  make && \
+  make install && \
+  mkdir lib && \
+  cp ./*.{so,so.1.0.0,a,pc} ./lib
+
+# Install python3 and modules needed
 
 RUN cd /tmp && \
-  wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tgz && \
-  tar zxvf Python-3.6.2.tgz && \
-  cd Python-3.6.2 && \
-  ./configure --prefix=${PFREDIR}/bin/python-3.6.2 && \
-  make && make install && \
-  echo "export PATH=${PFREDIR}/bin/python-3.6.2/bin:\$PATH" >> /root/.bashrc && \
+  echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/src/openssl-1.0.2o/" >> /root/.bashrc && \
   source /root/.bashrc && \
-  pip3 install requests ensembl_rest
+  export LDFLAGS="-L/usr/src/openssl-1.0.2o/lib" && \
+  wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz && \
+  tar zxvf Python-3.7.4.tgz && \
+  cd Python-3.7.4 && \
+  ./configure --prefix=${PFREDIR}/bin/python-3.7.4 && \
+  make && make install && \
+  echo "export PATH=${PFREDIR}/bin/python-3.7.4/bin:\$PATH" >> /root/.bashrc && \
+  source /root/.bashrc && \
+  pip3 install importlib_resources requests scrapy simplejson intervaltree && \
+  cp -r /usr/src/openssl-1.0.2o ${PFREDIR}/bin
 
 FROM scientificlinux/sl:6 as pfredenv
 
@@ -113,5 +129,6 @@ COPY entrypoint.sh entrypoint.sh
 COPY setup_env.sh setup_env.sh
 
 RUN chmod a+x entrypoint.sh && chmod a+x setup_env.sh
+RUN mv ${PFREDIR}/bin/openssl-1.0.2o /usr/src
 
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
