@@ -52,6 +52,10 @@ If the pfredimg is not longer needed, it can be removed via the command:
 
 `docker rmi pfredimg`
 
+Likewise for the docker volume. If it is not longer needed, run the command:
+
+`docker volume rm pfred-docker_pfred-vol`
+
 Docker provides a single command that will clean up any resources — images, containers, volumes, and networks
 that are dangling (not associated with a container), and to additionally remove any stopped containers and
 all unused images (not just dangling images), add the -a flag to the command:
