@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxo pipefail
+
 SCRIPTDIR="/home/pfred/scripts"
 SCRIPTS="pfred \
          BioPerl-1.6.1 \

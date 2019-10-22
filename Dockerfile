@@ -100,7 +100,7 @@ RUN cd /tmp && \
   make && make install && \
   echo "export PATH=${PFREDIR}/bin/python-3.7.4/bin:\$PATH" >> /root/.bashrc && \
   source /root/.bashrc && \
-  pip3 install importlib_resources requests scrapy simplejson intervaltree && \
+  pip3 install importlib_resources requests scrapy simplejson intervaltree natsort && \
   cp -r /usr/src/openssl-1.0.2o ${PFREDIR}/bin
 
 FROM scientificlinux/sl:6 as pfredenv
