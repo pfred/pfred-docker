@@ -5,11 +5,11 @@ This is a repository for the Dockerfile and file dependencies for the RESTful-PF
 
 # Creating the pfredservice docker container
 ## Cloning this repository (Windows)
-If you are cloning this repository and wnat to create the service in a Windows machine, then set `git` to not change the scripts `EOL` Unix setting. Do this via the following git command in CLI:
+If you are cloning this repository and want to create the service in a Windows machine, then set `git` to not change the scripts `EOL` Unix setting. Do this via the following git command in CLI:
 
 `git config --global core.autocrlf false`
 
-Then the environment on WIndows should be ready to deploy.
+Then the environment on Windows should be ready to deploy.
 
 ## Image builder
 To use this Dockerfile layer, run the following docker command:
@@ -17,7 +17,7 @@ To use this Dockerfile layer, run the following docker command:
 `docker build -t pfredimg .`
 
 Note that this process will setup the pfredservice environment and install all needed
-dependencies. Process might take up to 10 mins in a regular modern laptop.
+dependencies. It might take up to 10 mins in a regular modern laptop.
 
 ## Running the service container
 
@@ -29,7 +29,7 @@ Then, the container can be loaded by the following command:
 
 `docker-compose up -d`
 
-If run for the first time, this will create a docker volume named `dockerfiles-sl_pfred-vol` and a docker container 
+If run this command for the first time, it will create a docker volume named `dockerfiles-sl_pfred-vol` and a docker container 
 named `pfredservice`. Note that the `-d` flag will detach the shell from the running container, the RESTful service will not be ready to use until the command `docker-compose logs` shows a `Tomcat started` message.
 
 Once the service is ready, you should be able to access the REST API at http://localhost:8080/PFREDRestService/api. Keep in mind that the `entrypoint` will download the scripts and data generated from `bowtie`, therefore it might take up to 10 mins while the container downloads everything it needs before the pfredservice is ready.
