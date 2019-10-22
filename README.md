@@ -5,7 +5,7 @@ This is a repository for the Dockerfile and file dependencies for the RESTful-PF
 
 # Creating the pfredservice docker container
 ## Cloning this repository (Windows)
-If you are cloning this repository and wnat to create the service in a Windows machine, then set `git` to not change the scripts `EOL` Unix setting. Do this via the following git command in CLI:
+If you are cloning this repository and want to create the service in a Windows machine, then set `git` to not change the scripts `EOL` Unix setting. Do this via the following git command in CLI:
 
 `git config --global core.autocrlf false`
 
