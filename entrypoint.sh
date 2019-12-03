@@ -9,7 +9,7 @@ SCRIPTS="pfred \
          ensemblapi \
          bowtie"
 
-BOWTIEL="a b c d e"
+BOWTIEL="a b c d e f g h i j"
 
 # TODO: Check if website is working
 
