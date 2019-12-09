@@ -3,6 +3,7 @@ version: '3'
 services:
   pfred-service:
     image: pfredimg:latest
+    restart: always
     ports:
       - "8080:8080"
     container_name:
