@@ -4,6 +4,8 @@ FROM scientificlinux/sl:6 as builder
 
 MAINTAINER Simone Sciabola <simone.sciabola@biogen.com>
 
+COPY sl6_repos/ /etc/yum.repos.d/
+
 # Create pfred directory
 
 WORKDIR /home/pfred/
@@ -30,13 +32,13 @@ RUN yum install -y perl \
 # Install numpy, R
 
 RUN cd /home/ && \
-  wget https://sourceforge.net/projects/numpy/files/NumPy/1.4.1/numpy-1.4.1.tar.gz && \
-  wget https://cran.r-project.org/src/base/R-2/R-2.6.0.tar.gz && \
-  wget https://sourceforge.net/projects/rpy/files/rpy/1.0.2/rpy-1.0.2.tar.gz && \
+  wget --no-check-certificate  https://sourceforge.net/projects/numpy/files/NumPy/1.4.1/numpy-1.4.1.tar.gz && \
+  wget --no-check-certificate  https://cran.r-project.org/src/base/R-2/R-2.6.0.tar.gz && \
+  wget --no-check-certificate  https://sourceforge.net/projects/rpy/files/rpy/1.0.2/rpy-1.0.2.tar.gz && \
   for f in *.tar.gz; do tar -xvf "$f"; done && \
-  wget https://cran.r-project.org/src/contrib/Archive/pls/pls_2.1-0.tar.gz && \
-  wget https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-10.tar.gz && \
-  wget https://cran.r-project.org/src/contrib/Archive/e1071/e1071_1.5-27.tar.gz && \
+  wget --no-check-certificate  https://cran.r-project.org/src/contrib/Archive/pls/pls_2.1-0.tar.gz && \
+  wget --no-check-certificate  https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-10.tar.gz && \
+  wget --no-check-certificate  https://cran.r-project.org/src/contrib/Archive/e1071/e1071_1.5-27.tar.gz && \
   cd /home/numpy-1.4.1 && \
   python setup.py build --fcompiler=gnu95 && python setup.py install --prefix=/home/pfred/bin/numpy && \
   cd /home/R-2.6.0 && \
@@ -69,7 +71,7 @@ RUN mv /home/pfred/bin/numpy/lib64/python2.6/site-packages/numpy . && \
   rm -rf /home/pfred/bin/{numpy,rpy}
 
 FROM scientificlinux/sl:6 as pfredenv
-
+COPY sl6_repos/ /etc/yum.repos.d/
 # Create pfred directory
 
 WORKDIR /home/pfred/
