@@ -16,6 +16,8 @@ RUN cd /home && mkdir /home/pfred/bin
 
 # Install dependencies then clean up cache
 
+RUN yum update
+
 RUN yum install -y perl \
   wget \
   gcc \
@@ -23,13 +25,13 @@ RUN yum install -y perl \
   gcc-gfortran \
   python-devel \
   readline-devel \
+  zlib-devel \
   perl-DBI \
   perl-DBD-mysql && \
   yum clean all
 
-# Download numpy, R, rpy, R modules
-# untar everything
-# Install numpy, R
+
+
 
 RUN cd /home/ && \
   wget --no-check-certificate  https://sourceforge.net/projects/numpy/files/NumPy/1.4.1/numpy-1.4.1.tar.gz && \
@@ -51,7 +53,7 @@ RUN echo "export PATH=/home/pfred/bin/R2.6.0/bin:$PATH" >> ~/.bashrc && \
   echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/pfred/bin/R2.6.0/bin" >> ~/.bashrc && \
   echo "export RHOMES='/home/pfred/bin/R2.6.0/lib64/R'" >> ~/.bashrc && \
   echo "export PYTHONPATH=/home/pfred/bin/site-packages:/home/pfred/bin/site-packages/rpy:$PYTHONPATH" >> ~/.bashrc
-
+#echo "export PATH=/home/pfred/bin/Python-3.7.11/bin:$PATH" >> ~/.bashrc
 # Download and install R packages: rpy, pls, rf, e1071
 
 RUN source ~/.bashrc && \
@@ -78,10 +80,27 @@ WORKDIR /home/pfred/
 
 # Install java using yum. TODO: Use yum remove to remove unnecessary dependencies
 
-RUN yum install -y java perl perl-DBI perl-DBD-mysql wget libgfortran && yum clean all
+RUN yum install -y java perl perl-DBI perl-DBD-mysql wget libgfortran libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver && yum clean all
+
+
+
+
 
 COPY --from=builder /home/pfred/bin /home/pfred/bin
 COPY --from=builder /root/.bashrc /root/.bashrc
+
+
+
+
+RUN cd /home/pfred/ && \
+wget \
+    https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh && \
+    bash Anaconda3-2021.05-Linux-x86_64.sh -b && \
+    rm -f Anaconda3-2021.05-Linux-x86_64.sh && \
+    echo "export PATH=/root/anaconda3/bin:$PATH" >> ~/.bashrc && \
+    source /root/.bashrc && \
+    conda install importlib_resources && \
+    conda install simplejson
 
 # Create the scripts and scratch directory
 
@@ -96,3 +115,4 @@ COPY ./setup_env.sh setup_env.sh
 RUN chmod a+x entrypoint.sh && chmod a+x setup_env.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
+
