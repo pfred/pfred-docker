@@ -30,9 +30,6 @@ RUN yum install -y perl \
   perl-DBD-mysql && \
   yum clean all
 
-
-
-
 RUN cd /home/ && \
   wget --no-check-certificate  https://sourceforge.net/projects/numpy/files/NumPy/1.4.1/numpy-1.4.1.tar.gz && \
   wget --no-check-certificate  https://cran.r-project.org/src/base/R-2/R-2.6.0.tar.gz && \
@@ -53,7 +50,7 @@ RUN echo "export PATH=/home/pfred/bin/R2.6.0/bin:$PATH" >> ~/.bashrc && \
   echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/pfred/bin/R2.6.0/bin" >> ~/.bashrc && \
   echo "export RHOMES='/home/pfred/bin/R2.6.0/lib64/R'" >> ~/.bashrc && \
   echo "export PYTHONPATH=/home/pfred/bin/site-packages:/home/pfred/bin/site-packages/rpy:$PYTHONPATH" >> ~/.bashrc
-#echo "export PATH=/home/pfred/bin/Python-3.7.11/bin:$PATH" >> ~/.bashrc
+
 # Download and install R packages: rpy, pls, rf, e1071
 
 RUN source ~/.bashrc && \
@@ -74,6 +71,7 @@ RUN mv /home/pfred/bin/numpy/lib64/python2.6/site-packages/numpy . && \
 
 FROM scientificlinux/sl:6 as pfredenv
 COPY sl6_repos/ /etc/yum.repos.d/
+
 # Create pfred directory
 
 WORKDIR /home/pfred/
@@ -82,21 +80,15 @@ WORKDIR /home/pfred/
 
 RUN yum install -y java perl perl-DBI perl-DBD-mysql wget libgfortran libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver && yum clean all
 
-
-
-
-
 COPY --from=builder /home/pfred/bin /home/pfred/bin
 COPY --from=builder /root/.bashrc /root/.bashrc
 
-
-
+# Install python3 
 
 RUN cd /home/pfred/ && \
-wget \
-    https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh && \
-    bash Anaconda3-2021.05-Linux-x86_64.sh -b && \
-    rm -f Anaconda3-2021.05-Linux-x86_64.sh && \
+    wget https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh && \
+    bash naconda3-2021.05-Linux-x86_64.sh -b && \
+    rm -f naconda3-2021.05-Linux-x86_64.sh && \
     echo "export PATH=/root/anaconda3/bin:$PATH" >> ~/.bashrc && \
     source /root/.bashrc && \
     conda install importlib_resources && \
