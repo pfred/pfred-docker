@@ -87,8 +87,8 @@ COPY --from=builder /root/.bashrc /root/.bashrc
 
 RUN cd /home/pfred/ && \
     wget https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh && \
-    bash naconda3-2021.05-Linux-x86_64.sh -b && \
-    rm -f naconda3-2021.05-Linux-x86_64.sh && \
+    bash anaconda3-2021.05-Linux-x86_64.sh -b && \
+    rm -f anaconda3-2021.05-Linux-x86_64.sh && \
     echo "export PATH=/root/anaconda3/bin:$PATH" >> ~/.bashrc && \
     source /root/.bashrc && \
     conda install importlib_resources && \
